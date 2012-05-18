@@ -20,6 +20,8 @@
 #import "TiUIView.h"
 #import "TiUIViewProxy.h"
 
+#import "KIFTestStep.h"
+
 @implementation OrgRussfrankSpadeModule
 
 #pragma mark Internal
@@ -100,12 +102,15 @@
 // tap in the middle of the view
 -(void)tap:(id)args
 {
+
   ENSURE_SINGLE_ARG(args,TiViewProxy);
   TiUIView * view = ((TiViewProxy *) args).view;
 
   // view tap is given to us by the wonderful folks at square.  It actually taps
   // squarely in the center of the view.
-  [view tap];
+  TiThreadPerformOnMainThread(^{ 
+    [view tap]; 
+  }, YES);
 }
 
 // tap at a particular point
@@ -126,7 +131,9 @@
     [self throwException:TiExceptionInvalidType subreason:@"Parameter is not convertable to a TiPoint" location:CODELOCATION];
   }
 
-  [view tapAtPoint:point];
+  TiThreadPerformOnMainThread(^{ 
+    [view tapAtPoint:point];
+  }, YES);
 }
 
 // drag from one point to another
@@ -164,6 +171,52 @@
   TiUIView * view = ((TiViewProxy *) args).view;
 
   return [view isTappable];
+}
+
+-(void)type:(id)args
+{
+  NSString * text;
+  NSString * expectedResult;
+  TiViewProxy * proxy;
+
+  ENSURE_ARG_AT_INDEX(proxy, args, 0, TiViewProxy);
+  ENSURE_ARG_AT_INDEX(text, args, 1, NSString);
+
+  expectedResult = text;
+  TiUIView * view = proxy.view;
+
+  KIFTestStep * teststep = [[KIFTestStep alloc] init];
+
+  // below is stolen from the square folks
+
+  TiThreadPerformOnMainThread(^{ 
+    // Wait for the keyboard
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.5, false);
+
+    for (NSUInteger characterIndex = 0; characterIndex < [text length]; characterIndex++) {
+      NSString *characterString = [text substringWithRange:NSMakeRange(characterIndex, 1)];
+
+      if (![teststep _enterCharacter:characterString]) {
+        // Attempt to cheat if we couldn't find the character
+        if ([view respondsToSelector:@selector(setText:)]) {
+          NSLog(@"Spade: Unable to find keyboard key for %@. Inserting manually.", characterString);
+          [(UITextField *)view setText:[[(UITextField *)view text] stringByAppendingString:characterString]];
+        } else {
+          NSLog(@"Spade: Item does not look like a text entry field, can't insert character manually");
+        }
+      }
+    }
+
+    // This is probably a UITextField- or UITextView-ish view, so make sure it worked
+    if ([view respondsToSelector:@selector(text)]) {
+      // We trim \n and \r because they trigger the return key, so they won't show up in the final product on single-line inputs
+      NSString *expected = [expectedResult ? expectedResult : text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+      NSString *actual = [[view performSelector:@selector(text)] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+      if (![actual isEqualToString:expected]) {
+        NSLog(@"Spade: failed to actually enter text \"%@\", instead it was \"%@\"", text, actual);
+      }
+    }
+  }, YES);
 }
 
 @end

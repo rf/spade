@@ -45,6 +45,8 @@
 		3AB08CA015659B6800ADCEAD /* UIWindow-KIFAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AB08C8F15659B6800ADCEAD /* UIWindow-KIFAdditions.m */; };
 		AA747D9F0F9514B9006C5449 /* OrgRussfrankSpade_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* OrgRussfrankSpade_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
+		C2EFF19B1566C42D008DF299 /* KIFTestStep.h in Headers */ = {isa = PBXBuildFile; fileRef = C2EFF1991566C42D008DF299 /* KIFTestStep.h */; };
+		C2EFF19C1566C42D008DF299 /* KIFTestStep.m in Sources */ = {isa = PBXBuildFile; fileRef = C2EFF19A1566C42D008DF299 /* KIFTestStep.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +84,8 @@
 		3AB08C8F15659B6800ADCEAD /* UIWindow-KIFAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIWindow-KIFAdditions.m"; path = "Classes/UIWindow-KIFAdditions.m"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* OrgRussfrankSpade_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrgRussfrankSpade_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C2EFF1991566C42D008DF299 /* KIFTestStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KIFTestStep.h; path = Classes/KIFTestStep.h; sourceTree = "<group>"; };
+		C2EFF19A1566C42D008DF299 /* KIFTestStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KIFTestStep.m; path = Classes/KIFTestStep.m; sourceTree = "<group>"; };
 		D2AAC07E0554694100DB518D /* libOrgRussfrankSpade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOrgRussfrankSpade.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -127,6 +131,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C2EFF1991566C42D008DF299 /* KIFTestStep.h */,
+				C2EFF19A1566C42D008DF299 /* KIFTestStep.m */,
 				3AB08C7F15659B6800ADCEAD /* CGGeometry-KIFAdditions.h */,
 				3AB08C8015659B6800ADCEAD /* CGGeometry-KIFAdditions.m */,
 				3AB08C8115659B6800ADCEAD /* LoadableCategory.h */,
@@ -180,6 +186,7 @@
 				3AB08C9B15659B6800ADCEAD /* UITouch-KIFAdditions.h in Headers */,
 				3AB08C9D15659B6800ADCEAD /* UIView-KIFAdditions.h in Headers */,
 				3AB08C9F15659B6800ADCEAD /* UIWindow-KIFAdditions.h in Headers */,
+				C2EFF19B1566C42D008DF299 /* KIFTestStep.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +267,7 @@
 				3AB08C9C15659B6800ADCEAD /* UITouch-KIFAdditions.m in Sources */,
 				3AB08C9E15659B6800ADCEAD /* UIView-KIFAdditions.m in Sources */,
 				3AB08CA015659B6800ADCEAD /* UIWindow-KIFAdditions.m in Sources */,
+				C2EFF19C1566C42D008DF299 /* KIFTestStep.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

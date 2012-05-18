@@ -67,4 +67,6 @@ should be obvious.
 
 ## License
 
-MIT.
+My additions are MIT. 
+Jayway and KIF are both Apache 2, the LICENSEs / NOTICEs are in the 
+project directories where I used those projects.

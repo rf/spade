@@ -26,6 +26,10 @@ Drag along a view, again, local coords.
 
 Check if a view is visible on screen.
 
+### type (view, string)
+
+Attempt to type the specified string into the specified view.
+
 ## Usage
 
 You can extract the module zip files into your project directory and edit

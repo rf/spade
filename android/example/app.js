@@ -3,14 +3,12 @@
 // to test out the module and to provide instructions 
 // to users on how to use it by example.
 
-var testi = require('org.russfrank.spade');
+var spade = require('org.russfrank.spade');
 
 var win = Ti.UI.createWindow({
-	backgroundColor:'white'
+	backgroundColor:'white',
+  layout: 'vertical'
 });
-
-setTimeout(function () {
-}, 2000);
 
 var view1 = Ti.UI.createView({ backgroundColor:'#123', width: 250 });
 var view2 = Ti.UI.createView({ backgroundColor:'#246', width: 250 });
@@ -20,32 +18,31 @@ var scrollableView = Ti.UI.createScrollableView({
   views: [view1,view2,view3],
   showPagingControl: true,
   width: 320,
-  height: 430
+  height: 300
 });
 
+var field = Ti.UI.createTextField({width: 200, height: 40, borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED});
+
+win.add(field);
 win.add(scrollableView);
 
 scrollableView.addEventListener('scroll', function () {
-  setTimeout(function () {
-    Ti.API.debug('view1 says ' + testi.visible(view1));
-    Ti.API.debug('view2 says ' + testi.visible(view2));
-    Ti.API.debug('view3 says ' + testi.visible(view3));
-  }, 1000);
+  Ti.API.debug('view1 says ' + spade.visible(view1));
+  Ti.API.debug('view2 says ' + spade.visible(view2));
+  Ti.API.debug('view3 says ' + spade.visible(view3));
 });
 
-win.add(scrollableView);
-
 setTimeout(function () {
-  Ti.API.debug('dragging');
-  testi.drag(scrollableView, {x: 319, y: 100}, {x: 1, y: 100});
-}, 4000);
+  spade.drag(scrollableView, {x: 319, y: 200}, {x: 1, y: 200});
+  spade.tapAt(view1, {x: 10, y: 40});
 
-view1.addEventListener('click', function (e) { Ti.API.debug(JSON.stringify(e,null,4)); });
+}, 3000);
 
-setTimeout(function () {
-  Ti.API.debug('tapping');
-  testi.tap(view1);
-}, 2000);
+view1.addEventListener('click', function (e) { Ti.API.debug(e); });
 
 win.open();
-
+  
+setTimeout(function() {
+  spade.tap(field);
+  spade.type(field, "HELLO WORLD, hello world!");
+}, 2000);

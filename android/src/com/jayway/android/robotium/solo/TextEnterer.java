@@ -13,7 +13,7 @@ import android.widget.EditText;
  *
  */
 
-class TextEnterer{
+public class TextEnterer{
 
 	private final Instrumentation inst;
 	private final Clicker clicker;

@@ -23,11 +23,13 @@ import org.appcelerator.titanium.util.TiConvert;
 
 import android.app.Activity;
 import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.os.SystemClock;
 import android.view.View;
 import android.app.Instrumentation;
 import android.test.TouchUtils;
 import android.test.InstrumentationTestCase;
+import android.widget.EditText;
 
 import android.graphics.Rect;
 import android.graphics.Point;
@@ -41,6 +43,7 @@ import com.jayway.android.robotium.solo.Sleeper;
 import com.jayway.android.robotium.solo.Waiter;
 import com.jayway.android.robotium.solo.ActivityUtils;
 import com.jayway.android.robotium.solo.Searcher;
+import com.jayway.android.robotium.solo.TextEnterer;
 
 @Kroll.module(name="Spade", id="org.russfrank.spade")
 public class SpadeModule extends KrollModule
@@ -60,6 +63,7 @@ public class SpadeModule extends KrollModule
   Waiter mWaiter;
   ActivityUtils mActivityUtils;
   Searcher mSearcher;
+  TextEnterer mTextEnterer;
 
   // You can define constants with @Kroll.constant, for example:
   // @Kroll.constant public static final String EXTERNAL_NAME = value;
@@ -80,6 +84,7 @@ public class SpadeModule extends KrollModule
     mScroller = new Scroller(mInst, mActivityUtils, mViewFetcher, mSleeper);
     mSearcher = new Searcher(mViewFetcher, mScroller, mSleeper);
     mClicker = new Clicker(mViewFetcher, mScroller, mRobotiumUtils, mInst, mSleeper, mWaiter);
+    mTextEnterer = new TextEnterer(mInst, mClicker);
   }
 
   @Kroll.onAppCreate
@@ -154,6 +159,26 @@ public class SpadeModule extends KrollModule
     Rect rect = new Rect();
     Point point = new Point();
     return view.getGlobalVisibleRect(rect, point);
+  }
+
+  @Kroll.method
+  public boolean type(ViewProxy proxy, String text) {
+    TiUIView tiView = proxy.peekView();
+    View view;
+
+    if (tiView != null) {
+      view = tiView.getNativeView();
+    } else {
+      return false;
+    }
+
+    if (!(view instanceof EditText)) {
+      Log.e("spade", "type: expected TextArea or TextField for first argument");
+      return false;
+    }
+
+    mInst.sendStringSync(text);
+    return true;
   }
 
   private void dictToPoint(KrollDict point, int[] pointOut) throws IllegalArgumentException {

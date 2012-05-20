@@ -30,6 +30,11 @@ Check if a view is visible on screen.
 
 Attempt to type the specified string into the specified view.
 
+### tapText (string)
+
+Search for a view displaying the given string and tap it if found. The string
+argument will be interpereted internally as a regex.
+
 ## Usage
 
 You can extract the module zip files into your project directory and edit

@@ -181,6 +181,11 @@ public class SpadeModule extends KrollModule
     return true;
   }
 
+  @Kroll.method
+  public void tapText(String text) {
+    mSolo.clickOnText(text);
+  }
+
   private void dictToPoint(KrollDict point, int[] pointOut) throws IllegalArgumentException {
     if (!point.containsKey("x")) {
       throw new IllegalArgumentException("spade: required property \"x\" not found in point");

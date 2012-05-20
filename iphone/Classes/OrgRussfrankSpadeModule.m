@@ -46,7 +46,7 @@
 	// you *must* call the superclass
 	[super startup];
 	
-	NSLog(@"[INFO] %@ loaded",self);
+	NSLog(@"[INFO] spade loaded",self);
 }
 
 -(void)shutdown:(id)sender
@@ -134,6 +134,8 @@
   TiThreadPerformOnMainThread(^{ 
     [view tapAtPoint:point];
   }, YES);
+
+  return true;
 }
 
 // drag from one point to another
@@ -219,4 +221,120 @@
   }, YES);
 }
 
+-(TiViewProxy*)find:(id)arg
+{
+  ENSURE_SINGLE_ARG(arg, NSString);
+
+  UIWindow * window = [UIApplication sharedApplication].keyWindow;
+  if (!window) {
+    window = [[UIApplication sharedApplication].windows objectAtIndex:0];
+  }
+
+  NSError * error = NULL;
+  NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:arg options:0 error:&error];
+
+  if (error) return NULL;
+
+  UIView * found = [self findView:(UIView *)window withRegex: regex mustBeTiView: true];
+  return [found proxy];
+}
+
+-(BOOL)tapText: (id) arg
+{
+  ENSURE_SINGLE_ARG(arg, NSString);
+
+  UIWindow * window = [UIApplication sharedApplication].keyWindow;
+  if (!window) {
+    window = [[UIApplication sharedApplication].windows objectAtIndex:0];
+  }
+
+  NSError * error = NULL;
+  NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:arg options:0 error:&error];
+
+  if (error) return false;
+
+  UIView * view = [self findView:(UIView *) window withRegex: regex mustBeTiView: false];
+
+  if (view) {
+    [view tap];
+  } else {
+    return false;
+  }
+
+  return true;
+}
+
+// findView is the powerhouse of view finding.  It takes a regex
+// to match against.  With mustBeTiView we can only find views which have a
+// proxy property, as these are Ti views.
+
+-(UIView *)findView: (UIView *)view 
+  withRegex: (NSRegularExpression *)regex 
+  mustBeTiView: (BOOL)needsTiView
+{
+  NSString * text = NULL;
+
+  // try to find some text to match against
+  // This should work with buttons, textareas, textviews, and labels
+  if ([view respondsToSelector:@selector(text)]) {
+    text = [view text];
+  } else if ([view respondsToSelector:@selector(titleLabel)]) {
+    text = [[view titleLabel] text];
+  } 
+
+
+  // if we found some text, attempt a match against it
+  if (text) {
+
+    BOOL found = false;
+
+    // run the regex on the text
+    NSInteger matches = [regex 
+      numberOfMatchesInString: text 
+      options: 0 
+      range: NSMakeRange(0, [text length])
+    ];
+
+    found = matches > 0 ? true : false;
+
+    if (matches > 0) {
+      if (needsTiView) {
+
+        // only return views that are Titanium views
+        if ([view respondsToSelector:@selector(proxy)]) {
+          return view;
+        }
+
+        else {
+          // try its parent
+          UIView * parent = [view superview];
+          if ([parent respondsToSelector:@selector(proxy)]) {
+            return parent;
+          }
+        }
+      } 
+
+      else {
+        // if we dont care whether or not its a ti view, just return the view
+        return view;
+      }
+    } // if (matches > 0)
+  } // if (text)
+
+  // recurse
+  if ([[view subviews] count] > 0) {
+    for (id object in [view subviews]) {
+      UIView * found = [self 
+        findView: (UIView *)object 
+        withRegex: regex 
+        mustBeTiView: needsTiView
+      ];
+      if (found) return found;
+    }
+  }
+
+  return nil;
+}
+
 @end
+

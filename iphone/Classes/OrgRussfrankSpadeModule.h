@@ -10,4 +10,8 @@
 {
 }
 
+-(UIView *)findView: (UIView *)view 
+  withRegex: (NSRegularExpression *)regex 
+  mustBeTiView: (BOOL)needsTiView;
+
 @end

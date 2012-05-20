@@ -7,8 +7,7 @@ var spade = require('org.russfrank.spade');
 
 var win = Ti.UI.createWindow({
 	backgroundColor:'white',
-  layout: 'vertical',
-  navBarHidden: true
+  layout: 'vertical'
 });
 
 var view1 = Ti.UI.createView({ backgroundColor:'#123', width: 250 });
@@ -47,3 +46,5 @@ setTimeout(function() {
   spade.tap(field);
   spade.type(field, "HELLO WORLD, hello world!");
 }, 2000);
+
+spade.find(/test/);
